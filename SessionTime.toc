@@ -1,6 +1,8 @@
 ## Interface: 90001
 ## Title: Session Time
 ## Notes: Check the current session time played
+## SavedVariables: sessionsTable, sessionsCounter
 
 SessionTime.lua
-# SessionTime.xml
+TimeManagement.lua
+sessionsManagement.lua
