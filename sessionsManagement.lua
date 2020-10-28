@@ -1,9 +1,9 @@
-f:RegisterEvent("ADDON_LOADED");
-f:RegisterEvent("PLAYER_LOGOUT");
+timeDispFrame:RegisterEvent("ADDON_LOADED");
+timeDispFrame:RegisterEvent("PLAYER_LOGOUT");
 
 local initialSessionDate = date("%m/%d/%y %H:%M:%S"); -- this will be the key for the new entry of our saved table variable
 
-function f:OnEvent(event, arg1)
+function timeDispFrame:OnEvent(event, arg1)
     if event == "ADDON_LOADED" and arg1 == "SessionTime" then
         -- Saved variables are ready at this point. If there are none, variables will be set to nil.
         if (sessionsCounter == nil or sessionsTable == nil) then
@@ -12,13 +12,9 @@ function f:OnEvent(event, arg1)
         end
 
     elseif event == "PLAYER_LOGOUT" then
-        sessionsCounter = sessionsCounter + 1; -- Commit to memory.
-        sessionsTable[initialSessionDate] = sessionTime; -- Add session time to memory using the initial date as key.
-
-        -- (sessionsCounter not necessary atm. Pending to check whether it is more efficient to use a single table
-        -- with dates and sessions time or two tables, one with index and date, and the other with index and session time,
-        -- which allow easier sorting.)
+        sessionsCounter = sessionsCounter + 1; -- Commit count to memory.
+        sessionsTable[sessionsCounter] = {initialSessionDate, sessionTime}; -- Add session time to memory using the sessionCount (idx) as key.
     end
 end
 
-f:SetScript("OnEvent", f.OnEvent);
+timeDispFrame:SetScript("OnEvent", timeDispFrame.OnEvent);

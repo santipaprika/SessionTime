@@ -3,21 +3,21 @@
 sessionTime = 0;
 
 -- CREATE FRAME --
-f = CreateFrame("Frame", "TimeDisplayFrame", UIParent, "BasicFrameTemplate")
-f:SetWidth(256);
-f:SetHeight(100);
-f:SetPoint("CENTER",0,350)
-f:Hide()
+timeDispFrame = CreateFrame("Frame", "TimeDisplayFrame", UIParent, "BasicFrameTemplate")
+timeDispFrame:SetWidth(256);
+timeDispFrame:SetHeight(100);
+timeDispFrame:SetPoint("CENTER",0,350)
+timeDispFrame:Hide()
 
 -- CREATE FRAME TITLE --
-local fsTitle = f:CreateFontString(nil,"OVERLAY","GameTooltipText")
+local fsTitle = timeDispFrame:CreateFontString(nil,"OVERLAY","GameTooltipText")
 fsTitle:SetText("Total time played this session:")
-fsTitle:SetPoint("CENTER",f,"CENTER",0,5)
+fsTitle:SetPoint("CENTER",timeDispFrame,"CENTER",0,5)
 
 -- CREATE TIME DISPLAY FONT STRING --
-local fsSessionTime = f:CreateFontString(nil,"OVERLAY","GameTooltipText")
+local fsSessionTime = timeDispFrame:CreateFontString(nil,"OVERLAY","GameTooltipText")
 fsSessionTime:SetText("0 hours, 0 minutes, 0 seconds")
-fsSessionTime:SetPoint("CENTER",f,"CENTER",0,-25)
+fsSessionTime:SetPoint("CENTER",timeDispFrame,"CENTER",0,-25)
 
 -- MODIFY TIME DISPLAY TO MATCH CURRENT TIME --
 function FormatSessionTime()
@@ -28,20 +28,20 @@ function FormatSessionTime()
 end
 
 -- CREATE BUTTON --
-local b = CreateFrame("Button", "SessionTimeButton", UIParent, "UIPanelButtonTemplate");
-b:SetWidth(108); b:SetHeight(48); b:SetPoint("CENTER", 400, -350);
-local fsButton = b:CreateFontString(nil,"OVERLAY","GameTooltipText")
+local timeDispButton = CreateFrame("Button", "SessionTimeButton", UIParent, "UIPanelButtonTemplate");
+timeDispButton:SetWidth(108); timeDispButton:SetHeight(48); timeDispButton:SetPoint("CENTER", 400, -350);
+local fsButton = timeDispButton:CreateFontString(nil,"OVERLAY","GameTooltipText")
 fsButton:SetText("SESSION TIME")
-fsButton:SetPoint("CENTER",b,"CENTER",0,0)
+fsButton:SetPoint("CENTER",timeDispButton,"CENTER",0,0)
 
 -- CLICK UP BUTTON EVENT --
-b:RegisterForClicks("AnyUp");
-b:SetScript("OnClick", function (self, button, down)
-    if f:IsShown() then
-        f:Hide()
+timeDispButton:RegisterForClicks("AnyUp");
+timeDispButton:SetScript("OnClick", function (self, button, down)
+    if timeDispFrame:IsShown() then
+        timeDispFrame:Hide()
     else
         FormatSessionTime()
-        f:Show()
+        timeDispFrame:Show()
     end
 end);
 

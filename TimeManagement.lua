@@ -10,11 +10,11 @@ local function CountTime()
     while(true) do
         delay(1); -- every second
         sessionTime = sessionTime + 1; -- add one second
-        if (f:IsShown()) then
+        if (timeDispFrame:IsShown()) then
             FormatSessionTime(); -- it is not needed to update the font string unless it is being shown
         end
     end
 end
- 
+
 -- CALL FUNCTION AS COROUTINE
 coroutine.wrap(CountTime)(0)
