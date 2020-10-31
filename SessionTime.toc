@@ -6,3 +6,4 @@
 SessionTime.lua
 TimeManagement.lua
 sessionsManagement.lua
+sessionsHistory.lua

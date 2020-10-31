@@ -10,7 +10,7 @@ local function CountTime()
     while(true) do
         delay(1); -- every second
         sessionTime = sessionTime + 1; -- add one second
-        if (timeDispFrame:IsShown()) then
+        if (mainFrame:IsShown()) then
             FormatSessionTime(); -- it is not needed to update the font string unless it is being shown
         end
     end
