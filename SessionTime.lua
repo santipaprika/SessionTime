@@ -24,15 +24,6 @@ function FormatSessionTime()
     fsSessionTime:SetText(SecondsToHMSString(sessionTime))
 end
 
-function SecondsToHMSString(timeInSeconds)
-    print("SECONDS PROCESSING: " .. timeInSeconds);
-    hours = floor(timeInSeconds / 3600);
-    minutes = floor( (timeInSeconds - hours * 3600)  / 60 );
-    seconds = timeInSeconds - hours * 3600 - minutes * 60;
-    return string.format("%i hours, %i minutes, %i seconds", hours, minutes, seconds);
-end
-
-
 -- CREATE DISPLAY TRIGGER BUTTON --
 local mainButton = CreateFrame("Button", "MainButton", UIParent, "UIPanelButtonTemplate");
 mainButton:SetWidth(108); mainButton:SetHeight(48); mainButton:SetPoint("CENTER", 400, -350);
