@@ -1,5 +1,14 @@
 -- UTILS FUNCTIONS --
 
+function MakeMovable(f)
+    f:SetMovable(true)
+    f:EnableMouse(true)
+    f:RegisterForDrag("LeftButton")
+    f:SetScript("OnDragStart", f.StartMoving)
+    f:SetScript("OnDragStop", f.StopMovingOrSizing)
+end
+
+
 function subrange(tab, first, last)
     local sub = {}
     for i=first,last do

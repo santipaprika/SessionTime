@@ -5,6 +5,6 @@
 
 SessionTime.lua
 TimeManagement.lua
-sessionsManagement.lua
-sessionsHistory.lua
+SessionsManagement.lua
+SessionsHistory.lua
 STUtils.lua

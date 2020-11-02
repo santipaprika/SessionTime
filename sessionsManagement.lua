@@ -11,6 +11,7 @@ function mainFrame:OnEvent(event, arg1)
             sessionsTable = {}; -- And declare the table which will store each session time.
         end
         CreateHistoryFrame();
+        CreateEvents();
 
     elseif event == "PLAYER_LOGOUT" then
         sessionsCounter = sessionsCounter + 1; -- Commit count to memory.

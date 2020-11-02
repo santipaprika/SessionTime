@@ -4,7 +4,7 @@ function CreateHistoryFrame()
     -- OLD SESSIONS FRAME --
     local histFrame = CreateFrame("Frame", "HistFrame", UIParent, "BasicFrameTemplate");
     MakeMovable(histFrame);
-    histFrame:SetWidth(512);
+    histFrame:SetWidth(380);
     histFrame:SetHeight(200);
     histFrame:SetPoint("CENTER",0,0);
 
@@ -61,7 +61,7 @@ function CreateHistoryFrame()
     local histFrameButton = CreateFrame("Button", "SessionHistorialButton", mainFrame, "UIPanelButtonTemplate");
     histFrameButton:SetWidth(120); 
     histFrameButton:SetHeight(35); 
-    histFrameButton:SetPoint("CENTER", mainFrame, 0, -60);
+    histFrameButton:SetPoint("BOTTOM", mainFrame, -50, 15);
 
     local fsHistButton = histFrameButton:CreateFontString(nil,"OVERLAY","GameTooltipText");
     fsHistButton:SetText("Show all sessions");
