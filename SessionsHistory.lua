@@ -9,16 +9,22 @@ function CreateHistoryFrame()
     histFrame:SetPoint("CENTER",0,0);
 
     histFrame.text = histFrame:CreateFontString("SessionsFS", "OVERLAY", "GameTooltipText");
-    histFrame.text:SetPoint("TOPLEFT",histFrame,"TOPLEFT",10,-30)
-    histFrame.text:SetWidth(histFrame:GetWidth() - 10)
-    histFrame.text:SetHeight(histFrame:GetHeight() - 40)
+    histFrame.text:SetPoint("TOPLEFT",histFrame,"TOPLEFT",10,-30);
+    histFrame.text:SetWidth(histFrame:GetWidth() - 10);
+    histFrame.text:SetHeight(histFrame:GetHeight() - 40);
+    histFrame.text:SetSpacing(10);
+    histFrame.text:SetTextColor(1,0.8,0.8,1);
 
     histFrame:Hide();
 
-    local sessionsTableString = {}
+    local sessionsTableString = {"OLD SESSIONS", " "}
     for i = sessionsCounter, 1, -1 do -- Prepare the data to be displaed
-        table.insert(sessionsTableString, sessionsTable[i][1] .. " - " .. SecondsToHMSString(sessionsTable[i][2]))
+        color = i % 2 == 0 and "|cffcccccc" or "|cffffffff";
+        table.insert(sessionsTableString, color .. sessionsTable[i][1] .. " - " .. SecondsToHMSString(sessionsTable[i][2]))
     end
+
+
+    local entriesPerPage = 7;
 
     -- FRAME SLIDER --
     local histFrameSlider = CreateFrame("Slider", "HistFrameSlider", histFrame, "UIPanelScrollBarTemplate");
@@ -28,23 +34,24 @@ function CreateHistoryFrame()
     histFrameSlider:SetOrientation('VERTICAL');
     histFrameSlider:SetPoint("CENTER", histFrame, histFrame:GetWidth() / 2 - 15, - 10);
     histFrameSlider:SetScript("OnValueChanged", nil);
-    histFrameSlider:SetMinMaxValues(0, sessionsCounter);
+    histFrameSlider:SetMinMaxValues(0, sessionsCounter - entriesPerPage);
     histFrameSlider:SetValue(0);
     histFrameSlider:EnableMouseWheel(true);
+    histFrame:EnableMouseWheel(true);
+    histFrame:SetScript("OnMouseWheel", function(self, delta)
+        histFrameSlider:SetValue(histFrameSlider:GetValue() - delta);
+    end)
     histFrameSlider:SetScript("OnMouseWheel", function(self, delta)
         histFrameSlider:SetValue(histFrameSlider:GetValue() - delta);
     end)
 
     -- INITIAL DISPLAYED DATA
-    print(sessionsTableString[1]);
-    local dataToDisplay = subrange(sessionsTableString, 1, 9) -- table.unpack(sessionsTableString, 1, 9);
-    print("hola");
-    sessionsString = table.concat(dataToDisplay, "\n") .. "\n"
-    print(sessionsString);
+    local dataToDisplay = subrange(sessionsTableString, 1, entriesPerPage)
+    sessionsString = table.concat(dataToDisplay, "\n") .. "\n";
     histFrame.text:SetText(sessionsString);
 
     histFrameSlider:SetScript("OnValueChanged", function (self, value)
-        dataToDisplay = subrange(sessionsTableString, floor(value)+1, floor(value)+9);
+        dataToDisplay = subrange(sessionsTableString, floor(value)+1, floor(value)+entriesPerPage);
         sessionsString = table.concat(dataToDisplay, "\n") .. "\n"
         histFrame.text:SetText(sessionsString);
     end);
