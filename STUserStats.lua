@@ -14,6 +14,7 @@ function ProcessUserStats()
     statsFrame.text:SetHeight(statsFrame:GetHeight() - 40);
     statsFrame.text:SetSpacing(10);
     statsFrame.text:SetTextColor(1,0.8,0.8,1);
+    statsFrame:SetFrameStrata("DIALOG");
 
     statsFrame:Hide();
 
@@ -37,23 +38,31 @@ function ProcessUserStats()
     end);
 
     -- AVERAGE TIME PER DAY --
-    local dayDate = string.sub(sessionsTable[sessionsCounter][1], 1,9);
-    local dayTimeSum = sessionsTable[sessionsCounter][2];
-    local dayTimeTable = {}
 
-    for i = sessionsCounter-1, 1, -1 do -- Prepare the data to be displaed
-        sessionDate = string.sub(sessionsTable[i][1], 1, 9);
+    local dayAverageTimeSTR;
+    if (sessionsCounter > 0) then
+        local dayDate = string.sub(sessionsTable[sessionsCounter][1], 1,9);
+        local dayTimeSum = 0;
+        local dayTimeTable = {}
         
-        if (sessionDate == dayDate) then
-            dayTimeSum = dayTimeSum + sessionsTable[i][2];
-        else
-            print("Time played on " .. dayDate .. ": " .. dayTimeSum);
-            table.insert(dayTimeTable, dayTimeSum);
-            dayTimeSum = sessionsTable[i][2];
-            dayDate = sessionDate;
+        for i = sessionsCounter, 1, -1 do -- Prepare the data to be displaed
+            sessionDate = string.sub(sessionsTable[i][1], 1, 9);
+            
+            if (sessionDate == dayDate) then
+                dayTimeSum = dayTimeSum + sessionsTable[i][2];
+            else
+                table.insert(dayTimeTable, dayTimeSum);
+                dayTimeSum = sessionsTable[i][2];
+                dayDate = sessionDate;
+            end
+
+            if (i == 1) then table.insert(dayTimeTable, dayTimeSum); end
         end
+        dayAverageTimeSTR = SecondsToHMSString( ComputeMean(dayTimeTable) )
+    else
+        dayAverageTimeSTR = SecondsToHMSString(0);
     end
 
-    statsFrame.text:SetText("USER STATS\n\n|cffffffffDay Average Time: |cffcccc44" .. SecondsToHMSString( ComputeMean(dayTimeTable) ))
+    statsFrame.text:SetText("USER STATS\n\n|cffffffffDay Average Time: |cffcccc44" .. dayAverageTimeSTR)
 
 end

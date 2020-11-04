@@ -11,6 +11,11 @@ end
 
 function subrange(tab, first, last)
     local sub = {}
+    
+    if (#tab < last) then
+        print("SessionTime_ERROR: Subrange size is greater than table size.")
+    end
+
     for i=first,last do
         sub[#sub + 1] = tab[i]
     end
@@ -30,10 +35,9 @@ function ComputeMean(numberTable, lo, hi)
 
     if lo ~= false then lo = 1 end
     if hi ~= false then hi = #numberTable end
-    
     local totalSum = 0;
     for i = lo, hi, 1 do
         totalSum = totalSum + numberTable[i]
     end
-    return (totalSum / (hi - lo))
+    return (totalSum / (hi - lo + 1))
 end
