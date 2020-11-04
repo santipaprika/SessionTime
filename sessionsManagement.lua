@@ -1,3 +1,5 @@
+-- THIS SCRIPT ALSO CALLS SOME UNRELATED FUNCTIONS ONCE THE ADDON HAS BEEN LOADED 
+
 mainFrame:RegisterEvent("ADDON_LOADED");
 mainFrame:RegisterEvent("PLAYER_LOGOUT");
 
@@ -10,8 +12,10 @@ function mainFrame:OnEvent(event, arg1)
             sessionsCounter = 0; -- This is the first time this addon is loaded; initialize the count to 0.
             sessionsTable = {}; -- And declare the table which will store each session time.
         end
+        
         CreateHistoryFrame();
         CreateEvents();
+        ProcessUserStats();
 
     elseif event == "PLAYER_LOGOUT" then
         sessionsCounter = sessionsCounter + 1; -- Commit count to memory.

@@ -24,3 +24,16 @@ function SecondsToHMSString(timeInSeconds)
     seconds = timeInSeconds - hours * 3600 - minutes * 60;
     return string.format("%i hours, %i minutes, %i seconds", hours, minutes, seconds);
 end
+
+
+function ComputeMean(numberTable, lo, hi)
+
+    if lo ~= false then lo = 1 end
+    if hi ~= false then hi = #numberTable end
+    
+    local totalSum = 0;
+    for i = lo, hi, 1 do
+        totalSum = totalSum + numberTable[i]
+    end
+    return (totalSum / (hi - lo))
+end
