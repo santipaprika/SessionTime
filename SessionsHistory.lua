@@ -43,7 +43,7 @@ function CreateHistoryFrame()
 
     if (sessionsCounter > 0) then
         for i = sessionsCounter, 1, -1 do -- Prepare the data to be displaed
-            color = i % 2 == 0 and "|cffcccccc" or "|cffffffff";
+            local color = BlendColorFromTime(sessionsTable[i][2], {0,255,0}, 3600, {255,255,0}, 7200, {255,0,0});
             table.insert(sessionsTableString, color .. sessionsTable[i][1] .. " - " .. SecondsToHMSString(sessionsTable[i][2]))
         end
     end

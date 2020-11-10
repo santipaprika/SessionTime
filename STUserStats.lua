@@ -97,16 +97,16 @@ end
 
 function UpdateStats()
     local todayTimeUpdated = todayTime + sessionTime;
-    STStats[3][2] = SecondsToHMSString(todayTimeUpdated);
+    STStats[3][2] = todayTimeUpdated;
     local dayMeanUpdated = dayMean + sessionTime/numDays;
-    STStats[1][2] = SecondsToHMSString(dayMeanUpdated);
+    STStats[1][2] = dayMeanUpdated;
     local day7MeanUpdated;
     if (numDays > 7) then
         day7MeanUpdated = day7Mean + sessionTime/7;
     else
         day7MeanUpdated = dayMean + sessionTime/numDays;
     end
-    STStats[2][2] = SecondsToHMSString(day7MeanUpdated);
+    STStats[2][2] = day7MeanUpdated;
 
     WriteStatsFrame();
 end
@@ -115,7 +115,8 @@ function WriteStatsFrame()
     local statsTableString = {"USER STATS", " "}
     if (sessionsCounter > 0) then
         for i = 1, #STStats, 1 do -- Prepare the data to be displaed
-            table.insert(statsTableString, "|cffffffff" .. STStats[i][1] .. ": |cffcccc44" .. STStats[i][2])
+            local color = BlendColorFromTime(STStats[i][2], {0,255,0}, 3600, {255,255,0}, 10800, {255,0,0})
+            table.insert(statsTableString, "|cffffffff" .. STStats[i][1] .. ": " .. color .. SecondsToHMSString(STStats[i][2]))
         end
     end
 

@@ -21,7 +21,8 @@ fsSessionTime:SetPoint("TOP",mainFrame,"TOP",0,-75)
 
 -- MODIFY TIME DISPLAY TO MATCH CURRENT SESSION TIME --
 function FormatSessionTime()
-    fsSessionTime:SetText(SecondsToHMSString(sessionTime))
+    color = BlendColorFromTime(sessionTime, {0,255,0}, 3600, {255,255,0}, 7200, {255,0,0})
+    fsSessionTime:SetText(color .. SecondsToHMSString(sessionTime))
 end
 
 -- CREATE DISPLAY TRIGGER BUTTON --
