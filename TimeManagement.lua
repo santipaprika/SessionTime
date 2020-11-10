@@ -13,6 +13,9 @@ local function CountTime()
         if (mainFrame:IsShown()) then
             FormatSessionTime(); -- it is not needed to update the font string unless it is being shown
         end
+        if (statsFrame:IsShown()) then
+            UpdateStats();
+        end
     end
 end
 

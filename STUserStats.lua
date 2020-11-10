@@ -1,8 +1,12 @@
+local dayMean;
+local day7Mean;
+local todayTime;
+local numDays = 0;
 
 function ProcessUserStats()
-
+    
     -- "STATS" FRAME --
-    local statsFrame = CreateFrame("Frame", "statsFrame", UIParent, "BasicFrameTemplate");
+    statsFrame = CreateFrame("Frame", "statsFrame", UIParent, "BasicFrameTemplate");
     MakeMovable(statsFrame);
     statsFrame:SetWidth(380);
     statsFrame:SetHeight(200);
@@ -38,8 +42,11 @@ function ProcessUserStats()
     end);
 
     -- AVERAGE TIME PER DAY --
-
+    
     local dayAverageTimeSTR;
+    local day7AverageTimeSTR;
+    local todayTimeSTR;
+
     if (sessionsCounter > 0) then
         local dayDate = string.sub(sessionsTable[sessionsCounter][1], 1,9);
         local dayTimeSum = 0;
@@ -54,15 +61,64 @@ function ProcessUserStats()
                 table.insert(dayTimeTable, dayTimeSum);
                 dayTimeSum = sessionsTable[i][2];
                 dayDate = sessionDate;
+                numDays = numDays + 1;
             end
 
-            if (i == 1) then table.insert(dayTimeTable, dayTimeSum); end
+            if (i == 1) then 
+                table.insert(dayTimeTable, dayTimeSum);
+                numDays = numDays + 1;
+            end
         end
-        dayAverageTimeSTR = SecondsToHMSString( ComputeMean(dayTimeTable) )
+
+        dayMean = ComputeMean(dayTimeTable);
+        todayTime = dayTimeTable[1];
+
+        dayAverageTimeSTR = SecondsToHMSString(dayMean);
+        todayTimeSTR = SecondsToHMSString(todayTime);
+
+
+        if (#dayTimeTable >= 7) then
+            day7Mean = ComputeMean(dayTimeTable, 1, 7);
+            day7AverageTimeSTR = SecondsToHMSString(day7Mean);
+        else
+            day7Mean = dayMean;
+            day7AverageTimeSTR = dayAverageTimeSTR;
+        end
+        
     else
-        dayAverageTimeSTR = SecondsToHMSString(0);
+        dayMean, day7Mean, todayTime = 0, 0, 0;
+        dayAverageTimeSTR, day7AverageTimeSTR, todayTimeSTR = SecondsToHMSString(0), SecondsToHMSString(0), SecondsToHMSString(0);
     end
 
-    statsFrame.text:SetText("USER STATS\n\n|cffffffffDay Average Time: |cffcccc44" .. dayAverageTimeSTR)
 
+    STStats = {{"Day Average Time", dayAverageTimeSTR} , {"Last 7 Days Average Time",day7AverageTimeSTR}, {"Today's Time", todayTimeSTR}}
+    WriteStatsFrame();
+end
+
+function UpdateStats()
+    local todayTimeUpdated = todayTime + sessionTime;
+    STStats[3][2] = SecondsToHMSString(todayTimeUpdated);
+    local dayMeanUpdated = dayMean + sessionTime/numDays;
+    STStats[1][2] = SecondsToHMSString(dayMeanUpdated);
+    local day7MeanUpdated;
+    if (numDays > 7) then
+        day7MeanUpdated = day7Mean + sessionTime/7;
+    else
+        day7MeanUpdated = dayMean + sessionTime/numDays;
+    end
+    STStats[2][2] = SecondsToHMSString(day7MeanUpdated);
+
+    WriteStatsFrame();
+end
+
+function WriteStatsFrame()
+    local statsTableString = {"USER STATS", " "}
+    if (sessionsCounter > 0) then
+        for i = 1, #STStats, 1 do -- Prepare the data to be displaed
+            table.insert(statsTableString, "|cffffffff" .. STStats[i][1] .. ": |cffcccc44" .. STStats[i][2])
+        end
+    end
+
+    local statsString = table.concat(statsTableString, "\n") .. "\n";
+    statsFrame.text:SetText(statsString);
 end
