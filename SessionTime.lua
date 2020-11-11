@@ -1,13 +1,36 @@
 -- ADDON MAIN BEHAVIOR --
 
-sessionTime = 0; -- initialize time counter variable
-
 -- CREATE FRAME --
 mainFrame = CreateFrame("Frame", "MainFrame", UIParent, "BasicFrameTemplate")
 mainFrame:SetWidth(256);
 mainFrame:SetHeight(150);
 mainFrame:SetPoint("CENTER",0,350)
 mainFrame:Hide()
+
+-- CREATE LDB --
+local sTime = LibStub("AceAddon-3.0"):NewAddon("SessionTime", "AceConsole-3.0")
+local sTimeLDB = LibStub("LibDataBroker-1.1"):NewDataObject("SessionTime", {
+type = "data source",
+text = "Session Time",
+icon = "Interface\\AddOns\\SessionTime\\Textures\\stime-minimap-icon",
+OnClick = function() 
+    if mainFrame:IsShown() then
+        mainFrame:Hide()
+    else
+        FormatSessionTime()
+        mainFrame:Show()
+    end
+end,
+})
+local icon = LibStub("LibDBIcon-1.0")
+
+function sTime:OnInitialize()
+    self.db = LibStub("AceDB-3.0"):New("SessionTimeDB", { 
+        profile = { minimap = { hide = false, }, }, }) 
+    icon:Register("SessionTime", sTimeLDB, self.db.profile.minimap)
+end
+
+sessionTime = 0; -- initialize time counter variable
 
 -- CREATE FRAME TITLE --
 local fsTitle = mainFrame:CreateFontString(nil,"OVERLAY","GameTooltipText")
@@ -25,28 +48,8 @@ function FormatSessionTime()
     fsSessionTime:SetText(color .. SecondsToHMSString(sessionTime))
 end
 
--- CREATE DISPLAY TRIGGER BUTTON --
-local mainButton = CreateFrame("Button", "MainButton", UIParent, "UIPanelButtonTemplate");
-mainButton:SetWidth(108); mainButton:SetHeight(48); mainButton:SetPoint("CENTER", 400, -350);
-
-local fsMainButton = mainButton:CreateFontString(nil,"OVERLAY","GameTooltipText")
-fsMainButton:SetText("SESSION TIME")
-fsMainButton:SetPoint("CENTER",mainButton,"CENTER",0,0)
-
--- CLICK UP BUTTON EVENT --
-mainButton:RegisterForClicks("AnyUp");
-mainButton:SetScript("OnClick", function (self, button, down)
-    if mainFrame:IsShown() then
-        mainFrame:Hide()
-    else
-        FormatSessionTime()
-        mainFrame:Show()
-    end
-end);
-
 function CreateEvents()
     MakeMovable(mainFrame);
-    MakeMovable(mainButton);
 end
 
 
