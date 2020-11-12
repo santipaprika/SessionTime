@@ -41,59 +41,74 @@ function ProcessUserStats()
         end
     end);
 
-    -- AVERAGE TIME PER DAY --
-    
+    -- STATS COMPUTATION --
     local dayAverageTimeSTR;
     local day7AverageTimeSTR;
     local todayTimeSTR;
 
-    if (sessionsCounter > 0) then
-        local dayDate = string.sub(sessionsTable[sessionsCounter][1], 1,9);
-        local dayTimeSum = 0;
-        local dayTimeTable = {}
-        
-        for i = sessionsCounter, 1, -1 do -- Prepare the data to be displaed
-            sessionDate = string.sub(sessionsTable[i][1], 1, 9);
-            
-            if (sessionDate == dayDate) then
-                dayTimeSum = dayTimeSum + sessionsTable[i][2];
-            else
-                table.insert(dayTimeTable, dayTimeSum);
-                dayTimeSum = sessionsTable[i][2];
-                dayDate = sessionDate;
-                numDays = numDays + 1;
-            end
-
-            if (i == 1) then 
-                table.insert(dayTimeTable, dayTimeSum);
-                numDays = numDays + 1;
-            end
-        end
-
-        dayMean = ComputeMean(dayTimeTable);
-        todayTime = dayTimeTable[1];
-
-        dayAverageTimeSTR = SecondsToHMSString(dayMean);
-        todayTimeSTR = SecondsToHMSString(todayTime);
-
-
-        if (#dayTimeTable >= 7) then
-            day7Mean = ComputeMean(dayTimeTable, 1, 7);
-            day7AverageTimeSTR = SecondsToHMSString(day7Mean);
-        else
-            day7Mean = dayMean;
-            day7AverageTimeSTR = dayAverageTimeSTR;
-        end
-        
+    if (sessionsCounter > 0) then -- not first session        
+        local dayTimeTable = computeDayTimeTable()
+        DefineStats(dayTimeTable);
     else
         dayMean, day7Mean, todayTime = 0, 0, 0;
         dayAverageTimeSTR, day7AverageTimeSTR, todayTimeSTR = SecondsToHMSString(0), SecondsToHMSString(0), SecondsToHMSString(0);
     end
 
-
     STStats = {{"Day Average Time", dayAverageTimeSTR} , {"Last 7 Days Average Time",day7AverageTimeSTR}, {"Today's Time", todayTimeSTR}}
     WriteStatsFrame();
 end
+
+
+function computeDayTimeTable()
+    local dayDate = string.sub(sessionsTable[sessionsCounter][1], 1,8);
+    local dayTimeSum = 0;
+    local dayTimeTable = {}
+    
+    for i = sessionsCounter, 1, -1 do -- Prepare the data to be displaed
+        sessionDate = string.sub(sessionsTable[i][1], 1, 8);
+        
+        if (sessionDate == dayDate) then
+            dayTimeSum = dayTimeSum + sessionsTable[i][2];
+        else
+            table.insert(dayTimeTable, dayTimeSum);
+            dayTimeSum = sessionsTable[i][2];
+            dayDate = sessionDate;
+            numDays = numDays + 1;
+        end
+
+        if (i == 1) then 
+            table.insert(dayTimeTable, dayTimeSum);
+            numDays = numDays + 1;
+        end
+    end
+
+    return dayTimeTable
+end
+
+
+function DefineStats(dayTimeTable)
+    dayMean = ComputeMean(dayTimeTable);
+    
+    currentDate = date("%m/%d/%y");
+    if (currentDate ~= string.sub(sessionsTable[sessionsCounter][1], 1, 8)) then
+        todayTime = 0;
+    else
+        todayTime = dayTimeTable[1];
+    end
+
+    dayAverageTimeSTR = SecondsToHMSString(dayMean);
+    todayTimeSTR = SecondsToHMSString(todayTime);
+
+
+    if (#dayTimeTable >= 7) then
+        day7Mean = ComputeMean(dayTimeTable, 1, 7);
+        day7AverageTimeSTR = SecondsToHMSString(day7Mean);
+    else
+        day7Mean = dayMean;
+        day7AverageTimeSTR = dayAverageTimeSTR;
+    end
+end
+
 
 function UpdateStats()
     local todayTimeUpdated = todayTime + sessionTime;
@@ -110,6 +125,7 @@ function UpdateStats()
 
     WriteStatsFrame();
 end
+
 
 function WriteStatsFrame()
     local statsTableString = {"USER STATS", " "}

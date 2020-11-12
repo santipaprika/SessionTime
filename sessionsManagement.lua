@@ -3,7 +3,7 @@
 mainFrame:RegisterEvent("ADDON_LOADED");
 mainFrame:RegisterEvent("PLAYER_LOGOUT");
 
-local initialSessionDate = date("%m/%d/%y %H:%M:%S"); -- this will be the key for the new entry of our saved table variable
+local initialSessionDate = date("%m/%d/%y %H:%M:%S");
 
 function mainFrame:OnEvent(event, arg1)
     if event == "ADDON_LOADED" and arg1 == "SessionTime" then
