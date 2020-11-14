@@ -2,6 +2,8 @@ local dayMean;
 local day7Mean;
 local todayTime;
 local numDays = 0;
+local isFirstDaySession;
+local STStats;
 
 function InitializeUserStats()
     
@@ -29,6 +31,10 @@ function InitializeUserStats()
     -- -------------------------------------------------------------------------------------------------
 
     -- STATS COMPUTATION --
+    local currentDate = date("%m/%d/%y"); -- check whether it is the first session this day (if it is, it won't be registered yet)
+    isFirstDaySession = (currentDate ~= string.sub(sessionsTable[sessionsCounter][1], 1, 8))
+    print(isFirstDaySession and "true" or "false");
+
     if (sessionsCounter > 0) then -- not first session        
         local dayTimeTable = computeDayTimeTable()
         print("Number of days: " .. numDays);
@@ -48,10 +54,13 @@ end
 
 
 function computeDayTimeTable()
-    local dayDate = string.sub(sessionsTable[sessionsCounter][1], 1,8);
+    local dayDate = isFirstDaySession and date("%m/%d/%y") string.sub(sessionsTable[sessionsCounter][1], 1,8);
     local dayTimeSum = 0;
     local dayTimeTable = {}
     
+
+    prevMonth,prevDay,prevYear=dayDate:match("(%d+)/(%d+)/(%d+)")   -- initialize data and timestamp with first day (notice inverse loop)
+    prevDayTimestamp = time({month=prevMonth, day=prevDay, year=(2000 + prevYear)})
     for i = sessionsCounter, 1, -1 do -- Prepare the data to be displaed
         sessionDate = string.sub(sessionsTable[i][1], 1, 8);
         
@@ -59,6 +68,17 @@ function computeDayTimeTable()
             dayTimeSum = dayTimeSum + sessionsTable[i][2];
         else
             table.insert(dayTimeTable, dayTimeSum);
+
+            month,day,year=sessionDate:match("(%d+)/(%d+)/(%d+)")   -- get data from current sessoin date string
+            local dayTimestamp = time({month=month, day=day, year=(2000 + year)})   -- get timestamp
+            local daysBetween = floor((prevDayTimestamp - dayTimestamp)/ 86400);    -- compare consecutive listed days timestamp
+            print("Days between: ", daysBetween);
+            prevDayTimestamp = dayTimestamp;
+            for j = 2, daysBetween, 1 do    -- add as empty days as days in between found in previous step
+                table.insert(dayTimeTable, 0);
+                numDays = numDays + 1;
+            end
+
             dayTimeSum = sessionsTable[i][2];
             dayDate = sessionDate;
             numDays = numDays + 1;
@@ -74,27 +94,18 @@ function computeDayTimeTable()
 end
 
 
-local firstDaySession;
 function DefineStats(dayTimeTable)
-    
-    
-    currentDate = date("%m/%d/%y");
-    if (currentDate ~= string.sub(sessionsTable[sessionsCounter][1], 1, 8)) then
-        todayTime = 0;
-        firstDaySession = true;
-    else
-        todayTime = dayTimeTable[1];
-        firstDaySession = false;
-    end
-    
-    dayMean = ComputeMean(dayTimeTable) * (firstDaySession and numDays/(numDays+1) or 1); -- if not first day session, current day will already be on dayTimeTable
+    todayTime = isFirstDaySession and 0 or dayTimeTable[1]
+    print(isFirstDaySession and "true" or "false");
+    print(todayTime)
+    dayMean = ComputeMean(dayTimeTable) * (isFirstDaySession and numDays/(numDays+1) or 1); -- if not first day session, current day will already be on dayTimeTable
 
     dayAverageTimeSTR = SecondsToHMSString(dayMean);
     todayTimeSTR = SecondsToHMSString(todayTime);
 
 
     if (numDays >= 7) then
-        day7Mean = firstDaySession and ComputeMean(dayTimeTable, 1, 6)*(6/7) or ComputeMean(dayTimeTable, 1, 7);
+        day7Mean = isFirstDaySession and ComputeMean(dayTimeTable, 1, 6)*(6/7) or ComputeMean(dayTimeTable, 1, 7);
         day7AverageTimeSTR = SecondsToHMSString(day7Mean);
     else
         day7Mean = dayMean;
@@ -106,7 +117,7 @@ end
 function UpdateStats() 
     local todayTimeUpdated = todayTime + sessionTime;
     STStats[3][2] = todayTimeUpdated;
-    local dayMeanUpdated = dayMean + sessionTime/(numDays + (firstDaySession and 1 or 0));
+    local dayMeanUpdated = dayMean + sessionTime/(numDays + (isFirstDaySession and 1 or 0));
     STStats[1][2] = dayMeanUpdated;
     local day7MeanUpdated = (numDays >= 7) and (day7Mean + sessionTime/7) or dayMeanUpdated;
     STStats[2][2] = day7MeanUpdated;
