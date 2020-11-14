@@ -3,9 +3,9 @@
 ## Notes: Check the current session time played
 ## SavedVariables: sessionsTable, sessionsCounter, SessionTimeDB
 
+STUtils.lua
 SessionTime.lua
 TimeManagement.lua
 SessionsManagement.lua
 SessionsHistory.lua
-STUtils.lua
 STUserStats.lua

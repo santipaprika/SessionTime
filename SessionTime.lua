@@ -1,9 +1,7 @@
 -- ADDON MAIN BEHAVIOR --
 
 -- CREATE FRAME --
-mainFrame = CreateFrame("Frame", "MainFrame", UIParent, "BasicFrameTemplate")
-mainFrame:SetWidth(256);
-mainFrame:SetHeight(150);
+mainFrame = STCreateFrame("Frame", "MainFrame", 256, 150, nil, nil, nil, {"CENTER",0,350})
 mainFrame:SetPoint("CENTER",0,350)
 mainFrame:Hide()
 
@@ -23,6 +21,7 @@ OnClick = function()
 end,
 })
 local icon = LibStub("LibDBIcon-1.0")
+
 
 function sTime:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("SessionTimeDB", { 

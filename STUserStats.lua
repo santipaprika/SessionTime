@@ -3,58 +3,46 @@ local day7Mean;
 local todayTime;
 local numDays = 0;
 
-function ProcessUserStats()
+function InitializeUserStats()
     
     -- "STATS" FRAME --
-    statsFrame = CreateFrame("Frame", "statsFrame", UIParent, "BasicFrameTemplate");
-    MakeMovable(statsFrame);
-    statsFrame:SetWidth(380);
-    statsFrame:SetHeight(200);
-    statsFrame:SetPoint("CENTER",0,0);
-
+    statsFrame = STCreateFrame("Frame", "statsFrame", 380, 200, "DIALOG");
     statsFrame.text = statsFrame:CreateFontString("StatsFS", "OVERLAY", "GameTooltipText");
     statsFrame.text:SetPoint("TOPLEFT",statsFrame,"TOPLEFT",10,-30);
     statsFrame.text:SetWidth(statsFrame:GetWidth() - 10);
     statsFrame.text:SetHeight(statsFrame:GetHeight() - 40);
     statsFrame.text:SetSpacing(10);
     statsFrame.text:SetTextColor(1,0.8,0.8,1);
-    statsFrame:SetFrameStrata("DIALOG");
 
     statsFrame:Hide();
 
     -- CREATE "SHOW STATS" BUTTON --
-    local showStatsButton = CreateFrame("Button", "ShowStatsButton", mainFrame, "UIPanelButtonTemplate");
-    showStatsButton:SetWidth(90); 
-    showStatsButton:SetHeight(35); 
+    local showStatsButton = STCreateFrame("Button", "ShowStatsButton", 90, 35, "MEDIUM", mainFrame, "UIPanelButtonTemplate", {"BOTTOM", 60, 15})
     showStatsButton:SetPoint("BOTTOM", 60, 15);
     
     showStatsButton.text = showStatsButton:CreateFontString(nil,"OVERLAY","GameTooltipText");
     showStatsButton.text:SetText("Show Stats");
     showStatsButton.text:SetPoint("CENTER",0,0);
 
-    showStatsButton:RegisterForClicks("AnyUp");
-    showStatsButton:SetScript("OnClick", function (self, button, down)
-        if statsFrame:IsShown() then
-            statsFrame:Hide()
-        else
-            statsFrame:Show()
-        end
-    end);
+    STRegisterButtonFrameDisplay(showStatsButton, statsFrame);
+
+    -- -------------------------------------------------------------------------------------------------
 
     -- STATS COMPUTATION --
-    local dayAverageTimeSTR;
-    local day7AverageTimeSTR;
-    local todayTimeSTR;
-
     if (sessionsCounter > 0) then -- not first session        
         local dayTimeTable = computeDayTimeTable()
+        print("Number of days: " .. numDays);
+        for i = 1, numDays do
+            print("Day " .. i .. ": " .. dayTimeTable[i])
+        end
         DefineStats(dayTimeTable);
     else
         dayMean, day7Mean, todayTime = 0, 0, 0;
-        dayAverageTimeSTR, day7AverageTimeSTR, todayTimeSTR = SecondsToHMSString(0), SecondsToHMSString(0), SecondsToHMSString(0);
+        numDays = 1;
     end
 
-    STStats = {{"Day Average Time", dayAverageTimeSTR} , {"Last 7 Days Average Time",day7AverageTimeSTR}, {"Today's Time", todayTimeSTR}}
+    -- dayAverageTimeSTR, day7AverageTimeSTR, todayTimeSTR = SecondsToHMSString(dayMean), SecondsToHMSString(day7Mean), SecondsToHMSString(0);
+    STStats = {{"Day Average Time", dayMean} , {"Last 7 Days Average Time",day7Mean}, {"Today's Time", todayTime}}
     WriteStatsFrame();
 end
 
@@ -82,26 +70,31 @@ function computeDayTimeTable()
         end
     end
 
-    return dayTimeTable
+    return dayTimeTable;
 end
 
 
+local firstDaySession;
 function DefineStats(dayTimeTable)
-    dayMean = ComputeMean(dayTimeTable);
+    
     
     currentDate = date("%m/%d/%y");
     if (currentDate ~= string.sub(sessionsTable[sessionsCounter][1], 1, 8)) then
         todayTime = 0;
+        firstDaySession = true;
     else
         todayTime = dayTimeTable[1];
+        firstDaySession = false;
     end
+    
+    dayMean = ComputeMean(dayTimeTable) * (firstDaySession and numDays/(numDays+1) or 1); -- if not first day session, current day will already be on dayTimeTable
 
     dayAverageTimeSTR = SecondsToHMSString(dayMean);
     todayTimeSTR = SecondsToHMSString(todayTime);
 
 
-    if (#dayTimeTable >= 7) then
-        day7Mean = ComputeMean(dayTimeTable, 1, 7);
+    if (numDays >= 7) then
+        day7Mean = firstDaySession and ComputeMean(dayTimeTable, 1, 6)*(6/7) or ComputeMean(dayTimeTable, 1, 7);
         day7AverageTimeSTR = SecondsToHMSString(day7Mean);
     else
         day7Mean = dayMean;
@@ -110,30 +103,22 @@ function DefineStats(dayTimeTable)
 end
 
 
-function UpdateStats()
+function UpdateStats() 
     local todayTimeUpdated = todayTime + sessionTime;
     STStats[3][2] = todayTimeUpdated;
-    local dayMeanUpdated = dayMean + sessionTime/numDays;
+    local dayMeanUpdated = dayMean + sessionTime/(numDays + (firstDaySession and 1 or 0));
     STStats[1][2] = dayMeanUpdated;
-    local day7MeanUpdated;
-    if (numDays > 7) then
-        day7MeanUpdated = day7Mean + sessionTime/7;
-    else
-        day7MeanUpdated = dayMean + sessionTime/numDays;
-    end
+    local day7MeanUpdated = (numDays >= 7) and (day7Mean + sessionTime/7) or dayMeanUpdated;
     STStats[2][2] = day7MeanUpdated;
-
     WriteStatsFrame();
 end
 
 
 function WriteStatsFrame()
     local statsTableString = {"USER STATS", " "}
-    if (sessionsCounter > 0) then
-        for i = 1, #STStats, 1 do -- Prepare the data to be displaed
-            local color = BlendColorFromTime(STStats[i][2], {0,255,0}, 3600, {255,255,0}, 10800, {255,0,0})
-            table.insert(statsTableString, "|cffffffff" .. STStats[i][1] .. ": " .. color .. SecondsToHMSString(STStats[i][2]))
-        end
+    for i = 1, #STStats, 1 do -- Prepare the data to be displayed
+        local color = BlendColorFromTime(STStats[i][2], {0,255,0}, 3600, {255,255,0}, 10800, {255,0,0})
+        table.insert(statsTableString, "|cffffffff" .. STStats[i][1] .. ": " .. color .. SecondsToHMSString(STStats[i][2]))
     end
 
     local statsString = table.concat(statsTableString, "\n") .. "\n";

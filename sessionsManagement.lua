@@ -15,7 +15,7 @@ function mainFrame:OnEvent(event, arg1)
         
         CreateHistoryFrame();
         CreateEvents();
-        ProcessUserStats();
+        InitializeUserStats();
 
     elseif event == "PLAYER_LOGOUT" then
         sessionsCounter = sessionsCounter + 1; -- Commit count to memory.

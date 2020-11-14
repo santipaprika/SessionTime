@@ -33,8 +33,8 @@ end
 
 function ComputeMean(numberTable, lo, hi)
 
-    if lo ~= false then lo = 1 end
-    if hi ~= false then hi = #numberTable end
+    lo = lo or 1;
+    hi = hi or #numberTable;
     local totalSum = 0;
     for i = lo, hi, 1 do
         totalSum = totalSum + numberTable[i]
@@ -87,4 +87,33 @@ function rgbToHex(rgb)
 	end
 
 	return hexadecimal
+end
+
+
+function STCreateFrame(ftype, name, width, height, strata, parent, template, pointParams)
+    -- defaults
+    template = template or "BasicFrameTemplate";
+    parent = parent or UIParent;
+    strata = strata or "MEDIUM";
+    pointParams = pointParams or {"CENTER", parent, 0, 0}
+
+    local frame = CreateFrame(ftype, name, parent, template);
+    MakeMovable(frame);
+    frame:SetWidth(width);
+    frame:SetHeight(height);
+    frame:SetPoint(pointParams[1],pointParams[2],pointParams[3]);
+    frame:SetFrameStrata(strata);
+    return frame;
+end
+
+
+function STRegisterButtonFrameDisplay(STbutton, STframe)
+    STbutton:RegisterForClicks("AnyUp");
+    STbutton:SetScript("OnClick", function (self, button, down)
+        if STframe:IsShown() then
+            STframe:Hide()
+        else
+            STframe:Show()
+        end
+    end);
 end
