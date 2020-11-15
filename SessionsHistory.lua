@@ -2,27 +2,20 @@
 function CreateHistoryFrame()
     
     -- OLD SESSIONS FRAME --
-    local histFrame = STCreateFrame("Frame", "HistFrame", 380, 200, "HIGH");
+    local histFrame = STCreateFrame("Frame", "HistFrame", 380, 200, "HIGH", true);
 
-    histFrame.text = histFrame:CreateFontString("SessionsFS", "OVERLAY", "GameTooltipText");
-    histFrame.text:SetPoint("TOPLEFT",histFrame,"TOPLEFT",10,-30);
-    histFrame.text:SetWidth(histFrame:GetWidth() - 10);
-    histFrame.text:SetHeight(histFrame:GetHeight() - 40);
+    histFrame.text = STCreateFrameFontString(histFrame, "SessionsFS", {"TOPLEFT",histFrame,"TOPLEFT",10,-30}, histFrame:GetWidth() - 10, histFrame:GetHeight() - 40, {1,0.8,0.8,1})
     histFrame.text:SetSpacing(10);
-    histFrame.text:SetTextColor(1,0.8,0.8,1);
-
     histFrame:Hide();
 
 
     -- CREATE "SHOW OLD SESSIONS" BUTTON --
-    local histFrameButton = STCreateFrame("Button", "SessionHistorialButton", 120, 35, "MEDIUM", mainFrame, "UIPanelButtonTemplate", {"BOTTOM", -50, 15})
+    local histFrameButton = STCreateFrame("Button", "SessionHistorialButton", 120, 35, "MEDIUM", false, mainFrame, "UIPanelButtonTemplate", {"BOTTOM", -50, 15})
 
-    local fsHistButton = histFrameButton:CreateFontString(nil,"OVERLAY","GameTooltipText");
-    fsHistButton:SetText("Show all sessions");
-    fsHistButton:SetPoint("CENTER",histFrameButton,"CENTER",0,0);
+    histFrameButton.text = STCreateFrameFontString(histFrameButton, "HistButtonFS")
+    histFrameButton.text:SetText("Show all sessions");
 
     -- CLICK UP BUTTON EVENT --
-    histFrameButton:RegisterForClicks("AnyUp");
     STRegisterButtonFrameDisplay(histFrameButton, histFrame)
 
     local sessionsTableString = {"OLD SESSIONS", " "}
@@ -38,12 +31,8 @@ function CreateHistoryFrame()
     local entriesPerPage = 7;
 
     -- FRAME SLIDER --
-    local histFrameSlider = CreateFrame("Slider", "HistFrameSlider", histFrame, "UIPanelScrollBarTemplate");
-    histFrameSlider:ClearAllPoints();
-    histFrameSlider:SetWidth(20);
-    histFrameSlider:SetHeight(histFrame:GetHeight() - 60);
+    local histFrameSlider = STCreateFrame("Slider", "HistFrameSlider", 20, histFrame:GetHeight() - 60, "HIGH", false, histFrame, "UIPanelScrollBarTemplate", {"RIGHT", -4, -10})
     histFrameSlider:SetOrientation('VERTICAL');
-    histFrameSlider:SetPoint("CENTER", histFrame, histFrame:GetWidth() / 2 - 15, - 10);
     histFrameSlider:SetScript("OnValueChanged", nil);
 
     local dataToDisplay;

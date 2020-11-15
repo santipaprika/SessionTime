@@ -14,7 +14,6 @@ function mainFrame:OnEvent(event, arg1)
         end
         
         CreateHistoryFrame();
-        CreateEvents();
         InitializeUserStats();
 
     elseif event == "PLAYER_LOGOUT" then

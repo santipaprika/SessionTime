@@ -1,8 +1,7 @@
 -- ADDON MAIN BEHAVIOR --
 
 -- CREATE FRAME --
-mainFrame = STCreateFrame("Frame", "MainFrame", 256, 150, nil, nil, nil, {"CENTER",0,350})
-mainFrame:SetPoint("CENTER",0,350)
+mainFrame = STCreateFrame("Frame", "MainFrame", 256, 150, nil, true, nil, nil, {"CENTER",0,350})
 mainFrame:Hide()
 
 -- CREATE LDB --
@@ -32,14 +31,12 @@ end
 sessionTime = 0; -- initialize time counter variable
 
 -- CREATE FRAME TITLE --
-local fsTitle = mainFrame:CreateFontString(nil,"OVERLAY","GameTooltipText")
+local fsTitle = STCreateFrameFontString(mainFrame, "titleFS", {"TOP",mainFrame,"TOP",0,-45})
 fsTitle:SetText("Total time played this session:")
-fsTitle:SetPoint("TOP",mainFrame,"TOP",0,-45)
 
 -- CREATE TIME DISPLAY FONT STRING --
-local fsSessionTime = mainFrame:CreateFontString(nil,"OVERLAY","GameTooltipText")
+local fsSessionTime = STCreateFrameFontString(mainFrame, "sessionTimeFS", {"TOP",mainFrame,"TOP",0,-75})
 fsSessionTime:SetText("0 hours, 0 minutes, 0 seconds")
-fsSessionTime:SetPoint("TOP",mainFrame,"TOP",0,-75)
 
 -- MODIFY TIME DISPLAY TO MATCH CURRENT SESSION TIME --
 function FormatSessionTime()
@@ -47,9 +44,6 @@ function FormatSessionTime()
     fsSessionTime:SetText(color .. SecondsToHMSString(sessionTime))
 end
 
-function CreateEvents()
-    MakeMovable(mainFrame);
-end
 
 
 

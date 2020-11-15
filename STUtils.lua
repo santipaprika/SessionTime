@@ -90,7 +90,7 @@ function rgbToHex(rgb)
 end
 
 
-function STCreateFrame(ftype, name, width, height, strata, parent, template, pointParams)
+function STCreateFrame(ftype, name, width, height, strata, isMovable, parent, template, pointParams)
     -- defaults
     template = template or "BasicFrameTemplate";
     parent = parent or UIParent;
@@ -98,7 +98,7 @@ function STCreateFrame(ftype, name, width, height, strata, parent, template, poi
     pointParams = pointParams or {"CENTER", parent, 0, 0}
 
     local frame = CreateFrame(ftype, name, parent, template);
-    MakeMovable(frame);
+    if (isMovable) then MakeMovable(frame); end
     frame:SetWidth(width);
     frame:SetHeight(height);
     frame:SetPoint(pointParams[1],pointParams[2],pointParams[3]);
@@ -116,4 +116,26 @@ function STRegisterButtonFrameDisplay(STbutton, STframe)
             STframe:Show()
         end
     end);
+end
+
+
+function STCreateFrameFontString(frame, name, pointParams, width, height, color, layer, font)
+    -- defaults
+    pointParams = pointParams or {"CENTER",0,0};
+    color = color or {1,1,1,1};
+    layer = layer or "OVERLAY";
+    font = font or "GameTooltipText";
+
+    local frameFS = frame:CreateFontString(name, layer, font);
+    if (#pointParams == 5) then
+        frameFS:SetPoint(pointParams[1],pointParams[2],pointParams[3],pointParams[4],pointParams[5]);
+    else
+        frameFS:SetPoint(pointParams[1],pointParams[2],pointParams[3]);
+    end
+
+    if (width) then frameFS:SetWidth(width); end
+    if (height) then frameFS:SetHeight(height); end
+    frameFS:SetTextColor(color[1],color[2],color[3],color[4]);
+
+    return frameFS;
 end

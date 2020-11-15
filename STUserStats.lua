@@ -8,23 +8,18 @@ local STStats;
 function InitializeUserStats()
     
     -- "STATS" FRAME --
-    statsFrame = STCreateFrame("Frame", "statsFrame", 380, 200, "DIALOG");
-    statsFrame.text = statsFrame:CreateFontString("StatsFS", "OVERLAY", "GameTooltipText");
-    statsFrame.text:SetPoint("TOPLEFT",statsFrame,"TOPLEFT",10,-30);
-    statsFrame.text:SetWidth(statsFrame:GetWidth() - 10);
-    statsFrame.text:SetHeight(statsFrame:GetHeight() - 40);
+    statsFrame = STCreateFrame("Frame", "statsFrame", 380, 200, "DIALOG", true);
+    statsFrame.text = STCreateFrameFontString(statsFrame, "StatsFS", {"TOPLEFT",statsFrame,"TOPLEFT",10,-30}, statsFrame:GetWidth() - 10, statsFrame:GetHeight() - 40, {1,0.8,0.8,1})
+
     statsFrame.text:SetSpacing(10);
-    statsFrame.text:SetTextColor(1,0.8,0.8,1);
 
     statsFrame:Hide();
 
     -- CREATE "SHOW STATS" BUTTON --
-    local showStatsButton = STCreateFrame("Button", "ShowStatsButton", 90, 35, "MEDIUM", mainFrame, "UIPanelButtonTemplate", {"BOTTOM", 60, 15})
-    showStatsButton:SetPoint("BOTTOM", 60, 15);
+    local showStatsButton = STCreateFrame("Button", "ShowStatsButton", 90, 35, "MEDIUM", false, mainFrame, "UIPanelButtonTemplate", {"BOTTOM", 60, 15})
     
-    showStatsButton.text = showStatsButton:CreateFontString(nil,"OVERLAY","GameTooltipText");
+    showStatsButton.text = STCreateFrameFontString(showStatsButton, "StatsButtonFS", {"CENTER",0,0})
     showStatsButton.text:SetText("Show Stats");
-    showStatsButton.text:SetPoint("CENTER",0,0);
 
     STRegisterButtonFrameDisplay(showStatsButton, statsFrame);
 
