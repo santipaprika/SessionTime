@@ -107,12 +107,14 @@ function STCreateFrame(ftype, name, width, height, strata, isMovable, parent, te
 end
 
 
-function STRegisterButtonFrameDisplay(STbutton, STframe)
+function STRegisterButtonFrameDisplay(STbutton, STframe, functionToApply)
+    functionToApply = functionToApply or (function() end);
     STbutton:RegisterForClicks("AnyUp");
     STbutton:SetScript("OnClick", function (self, button, down)
         if STframe:IsShown() then
             STframe:Hide()
         else
+            functionToApply();
             STframe:Show()
         end
     end);

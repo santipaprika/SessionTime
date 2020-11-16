@@ -10,9 +10,7 @@ function InitializeUserStats()
     -- "STATS" FRAME --
     statsFrame = STCreateFrame("Frame", "statsFrame", 380, 200, "DIALOG", true);
     statsFrame.text = STCreateFrameFontString(statsFrame, "StatsFS", {"TOPLEFT",statsFrame,"TOPLEFT",10,-30}, statsFrame:GetWidth() - 10, statsFrame:GetHeight() - 40, {1,0.8,0.8,1})
-
     statsFrame.text:SetSpacing(10);
-
     statsFrame:Hide();
 
     -- CREATE "SHOW STATS" BUTTON --
@@ -21,7 +19,7 @@ function InitializeUserStats()
     showStatsButton.text = STCreateFrameFontString(showStatsButton, "StatsButtonFS", {"CENTER",0,0})
     showStatsButton.text:SetText("Show Stats");
 
-    STRegisterButtonFrameDisplay(showStatsButton, statsFrame);
+    STRegisterButtonFrameDisplay(showStatsButton, statsFrame, UpdateStats);
 
     -- -------------------------------------------------------------------------------------------------
 
