@@ -12,13 +12,32 @@ function mainFrame:OnEvent(event, arg1)
             sessionsCounter = 0; -- This is the first time this addon is loaded; initialize the count to 0.
             sessionsTable = {}; -- And declare the table which will store each session time.
         end
+
+        if (characters == nil) then
+            characters = {}
+        end
+
+        local characterName, _ = UnitName("player");   -- check if current player has been registered before.
+        local currentCharacter = characterName .. " - " .. GetRealmName();
+
+        characterIdx = -1;
+        for key,value in ipairs(characters) do
+            if (value == currentCharacter) then
+                characterIdx = key;
+            end
+        end
+
+        if characterIdx == -1 then 
+            characters[#characters+1] = currentCharacter; 
+            characterIdx = #characters;
+        end
         
         CreateHistoryFrame();
         InitializeUserStats();
 
     elseif event == "PLAYER_LOGOUT" then
         sessionsCounter = sessionsCounter + 1; -- Commit count to memory.
-        sessionsTable[sessionsCounter] = {initialSessionDate, sessionTime}; -- Add session time to memory using the sessionCount (idx) as key.
+        sessionsTable[sessionsCounter] = {initialSessionDate, sessionTime, characterIdx}; -- Add session time to memory using the sessionCount (idx) as key.
     end
 end
 

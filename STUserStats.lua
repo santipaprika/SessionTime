@@ -26,7 +26,6 @@ function InitializeUserStats()
     -- STATS COMPUTATION --
     local currentDate = date("%m/%d/%y"); -- check whether it is the first session this day (if it is, it won't be registered yet)
     
-    
     if (sessionsCounter > 0) then -- not first session        
         isFirstDaySession = (currentDate ~= string.sub(sessionsTable[sessionsCounter][1], 1, 8))
         local dayTimeTable = computeDayTimeTable()
@@ -43,7 +42,20 @@ end
 
 
 function computeDayTimeTable()
-    local dayDate = isFirstDaySession and date("%m/%d/%y") or string.sub(sessionsTable[sessionsCounter][1], 1,8);
+    -- local lastSession = string.sub(sessionsTable[sessionsCounter][1], 1,8);
+    -- if (showCharacterData) then
+    --     for i = sessionsCounter, 1, -1 do
+    --         if (sessionsTable[i][3] == characterIdx) then
+    --             lastSession = string.sub(sessionsTable[sessionsCounter][1], 1,8)
+    --             break;
+    --         end
+    --         if (i == 1) then 
+    --             lastSession = date("%m/%d/%y");
+    --         end
+    --     end
+    -- end
+
+    local dayDate = date("%m/%d/%y");
     local dayTimeSum = 0;
     local dayTimeTable = {}
     
@@ -51,27 +63,30 @@ function computeDayTimeTable()
     prevMonth,prevDay,prevYear=dayDate:match("(%d+)/(%d+)/(%d+)")   -- initialize data and timestamp with first day (notice inverse loop)
     prevDayTimestamp = time({month=prevMonth, day=prevDay, year=(2000 + prevYear)})
     for i = sessionsCounter, 1, -1 do -- Prepare the data to be displaed
-        sessionDate = string.sub(sessionsTable[i][1], 1, 8);
         
-        if (sessionDate == dayDate) then
-            dayTimeSum = dayTimeSum + sessionsTable[i][2];
-        else
-            table.insert(dayTimeTable, dayTimeSum);
+        if (sessionsTable[i][3] == characterIdx or not showCharacterData) then
+            local sessionDate = string.sub(sessionsTable[i][1], 1, 8);
+            
+            if (sessionDate == dayDate) then
+                dayTimeSum = dayTimeSum + sessionsTable[i][2];
+            else
+                table.insert(dayTimeTable, dayTimeSum);
 
-            month,day,year=sessionDate:match("(%d+)/(%d+)/(%d+)")   -- get data from current sessoin date string
-            local dayTimestamp = time({month=month, day=day, year=(2000 + year)})   -- get timestamp
-            local daysBetween = floor((prevDayTimestamp - dayTimestamp)/ 86400);    -- compare consecutive listed days timestamp
-            prevDayTimestamp = dayTimestamp;
-            for j = 2, daysBetween, 1 do    -- add as empty days as days in between found in previous step
-                table.insert(dayTimeTable, 0);
+                month,day,year=sessionDate:match("(%d+)/(%d+)/(%d+)")   -- get data from current sessoin date string
+                local dayTimestamp = time({month=month, day=day, year=(2000 + year)})   -- get timestamp
+                local daysBetween = floor((prevDayTimestamp - dayTimestamp)/ 86400);    -- compare consecutive listed days timestamp
+                prevDayTimestamp = dayTimestamp;
+                for j = 2, daysBetween, 1 do    -- add as empty days as days in between found in previous step
+                    table.insert(dayTimeTable, 0);
+                    numDays = numDays + 1;
+                end
+
+                dayTimeSum = sessionsTable[i][2];
+                dayDate = sessionDate;
                 numDays = numDays + 1;
             end
-
-            dayTimeSum = sessionsTable[i][2];
-            dayDate = sessionDate;
-            numDays = numDays + 1;
         end
-
+        
         if (i == 1) then 
             table.insert(dayTimeTable, dayTimeSum);
             numDays = numDays + 1;
@@ -112,7 +127,7 @@ end
 
 
 function WriteStatsFrame()
-    local statsTableString = {"USER STATS", " "}
+    local statsTableString = showCharacterData and {"CHARACTER STATS (" .. characters[characterIdx] .. "):", " "} or {"USER STATS", " "}
     for i = 1, #STStats, 1 do -- Prepare the data to be displayed
         local color = BlendColorFromTime(STStats[i][2], {0,255,0}, 3600, {255,255,0}, 10800, {255,0,0})
         table.insert(statsTableString, "|cffffffff" .. STStats[i][1] .. ": " .. color .. SecondsToHMSString(STStats[i][2]))

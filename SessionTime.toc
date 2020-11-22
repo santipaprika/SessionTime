@@ -1,7 +1,7 @@
 ## Interface: 90001
 ## Title: Session Time
 ## Notes: Check the current session time played
-## SavedVariables: sessionsTable, sessionsCounter, SessionTimeDB
+## SavedVariables: characters, sessionsTable, sessionsCounter, SessionTimeDB
 
 STUtils.lua
 SessionTime.lua
@@ -9,3 +9,4 @@ TimeManagement.lua
 SessionsManagement.lua
 SessionsHistory.lua
 STUserStats.lua
+CharacterDataDisplayManagement.lua

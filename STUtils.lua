@@ -120,6 +120,14 @@ function STRegisterButtonFrameDisplay(STbutton, STframe, functionToApply)
     end);
 end
 
+function STRegisterCheckboxChange(STCheckButton, functionToApply)
+    functionToApply = functionToApply or (function() end);
+    STCheckButton:RegisterForClicks("AnyUp");
+    STCheckButton:SetScript("OnClick", function (self)
+        functionToApply();
+    end);
+end
+
 
 function STCreateFrameFontString(frame, name, pointParams, width, height, color, layer, font)
     -- defaults

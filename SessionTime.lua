@@ -29,6 +29,7 @@ function sTime:OnInitialize()
 end
 
 sessionTime = 0; -- initialize time counter variable
+showCharacterData = false;
 
 -- CREATE FRAME TITLE --
 local fsTitle = STCreateFrameFontString(mainFrame, "titleFS", {"TOP",mainFrame,"TOP",0,-45})
