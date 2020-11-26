@@ -37,7 +37,7 @@ function mainFrame:OnEvent(event, arg1)
 
     elseif event == "PLAYER_LOGOUT" then
         sessionsCounter = sessionsCounter + 1; -- Commit count to memory.
-        sessionsTable[sessionsCounter] = {initialSessionDate, sessionTime, characterIdx}; -- Add session time to memory using the sessionCount (idx) as key.
+        sessionsTable[sessionsCounter] = {initialSessionDate, sessionTime, characterIdx}; -- Store session time and metadata to disk using the sessionCount (idx) as key.
     end
 end
 

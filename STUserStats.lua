@@ -14,7 +14,7 @@ function InitializeUserStats()
     statsFrame:Hide();
 
     -- CREATE "SHOW STATS" BUTTON --
-    local showStatsButton = STCreateFrame("Button", "ShowStatsButton", 90, 35, "MEDIUM", false, mainFrame, "UIPanelButtonTemplate", {"BOTTOM", 60, 15})
+    local showStatsButton = STCreateFrame("Button", "ShowStatsButton", 90, 35, "MEDIUM", false, mainFrame, "UIPanelButtonTemplate", {"BOTTOM", 60, 40})
     
     showStatsButton.text = STCreateFrameFontString(showStatsButton, "StatsButtonFS", {"CENTER",0,0})
     showStatsButton.text:SetText("Show Stats");
@@ -42,24 +42,11 @@ end
 
 
 function computeDayTimeTable()
-    -- local lastSession = string.sub(sessionsTable[sessionsCounter][1], 1,8);
-    -- if (showCharacterData) then
-    --     for i = sessionsCounter, 1, -1 do
-    --         if (sessionsTable[i][3] == characterIdx) then
-    --             lastSession = string.sub(sessionsTable[sessionsCounter][1], 1,8)
-    --             break;
-    --         end
-    --         if (i == 1) then 
-    --             lastSession = date("%m/%d/%y");
-    --         end
-    --     end
-    -- end
-
     local dayDate = date("%m/%d/%y");
     local dayTimeSum = 0;
+    numDays = 0;
     local dayTimeTable = {}
     
-
     prevMonth,prevDay,prevYear=dayDate:match("(%d+)/(%d+)/(%d+)")   -- initialize data and timestamp with first day (notice inverse loop)
     prevDayTimestamp = time({month=prevMonth, day=prevDay, year=(2000 + prevYear)})
     for i = sessionsCounter, 1, -1 do -- Prepare the data to be displaed
@@ -100,10 +87,8 @@ end
 function DefineStats(dayTimeTable)
     todayTime = isFirstDaySession and 0 or dayTimeTable[1]
     dayMean = ComputeMean(dayTimeTable) * (isFirstDaySession and numDays/(numDays+1) or 1); -- if not first day session, current day will already be on dayTimeTable
-
     dayAverageTimeSTR = SecondsToHMSString(dayMean);
     todayTimeSTR = SecondsToHMSString(todayTime);
-
 
     if (numDays >= 7) then
         day7Mean = isFirstDaySession and ComputeMean(dayTimeTable, 1, 6)*(6/7) or ComputeMean(dayTimeTable, 1, 7);

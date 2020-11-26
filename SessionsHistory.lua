@@ -2,7 +2,7 @@
 function CreateHistoryFrame()
     
     -- OLD SESSIONS FRAME --
-    histFrame = STCreateFrame("Frame", "HistFrame", 380, 200, "HIGH", true);
+    histFrame = STCreateFrame("Frame", "HistFrame", 530, 200, "HIGH", true);
 
     histFrame.text = STCreateFrameFontString(histFrame, "SessionsFS", {"TOPLEFT",histFrame,"TOPLEFT",10,-30}, histFrame:GetWidth() - 10, histFrame:GetHeight() - 40, {1,0.8,0.8,1})
     histFrame.text:SetSpacing(10);
@@ -10,7 +10,7 @@ function CreateHistoryFrame()
 
 
     -- CREATE "SHOW OLD SESSIONS" BUTTON --
-    local histFrameButton = STCreateFrame("Button", "SessionHistorialButton", 120, 35, "MEDIUM", false, mainFrame, "UIPanelButtonTemplate", {"BOTTOM", -50, 15})
+    local histFrameButton = STCreateFrame("Button", "SessionHistorialButton", 120, 35, "MEDIUM", false, mainFrame, "UIPanelButtonTemplate", {"BOTTOM", -50, 40})
 
     histFrameButton.text = STCreateFrameFontString(histFrameButton, "HistButtonFS")
     histFrameButton.text:SetText("Show all sessions");
@@ -34,7 +34,7 @@ function BuildSessionsTableString()
         for i = sessionsCounter, 1, -1 do -- Prepare the data to be displaed
             if (sessionsTable[i][3] == characterIdx or not showCharacterData) then
                 local color = BlendColorFromTime(sessionsTable[i][2], {0,255,0}, 3600, {255,255,0}, 7200, {255,0,0});
-                table.insert(sessionsTableString, color .. sessionsTable[i][1] .. " - " .. SecondsToHMSString(sessionsTable[i][2]))
+                table.insert(sessionsTableString, color .. sessionsTable[i][1] .. " - " .. SecondsToHMSString(sessionsTable[i][2]) .. " (" .. characters[sessionsTable[i][3]] .. ")")
             end
         end
     end

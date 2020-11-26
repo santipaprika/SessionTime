@@ -1,7 +1,5 @@
--- ADDON MAIN BEHAVIOR --
-
 -- CREATE FRAME --
-mainFrame = STCreateFrame("Frame", "MainFrame", 256, 150, nil, true, nil, nil, {"CENTER",0,350})
+mainFrame = STCreateFrame("Frame", "MainFrame", 256, 180, nil, true, nil, nil, {"CENTER",0,300})
 mainFrame:Hide()
 
 -- CREATE LDB --
