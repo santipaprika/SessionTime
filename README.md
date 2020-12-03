@@ -17,14 +17,15 @@ Shows the current session's time played and provides stats regarding play time.
   - 3 hours → Red
 - Being *Away*/*AFK* stops the session's time counter.
 
-## Demos:
-![Time Display](https://media.giphy.com/media/THbeIYQCruPUgu4Njd/giphy.gif)  
-![History And Stats](https://media.giphy.com/media/mBG9SLQnR1LG9loGDY/giphy.gif)  
-![AFK](https://media.giphy.com/media/lhF6OOuVYyn6Nhmm7M/giphy.gif)  
-
+## Demo:
+![Time Display](https://media.giphy.com/media/eRNDMuoIO26G22Rtyy/giphy.gif)  
 
 ## Future work:
 - More stats.
 - Fix for extreme cases.
 - Characters' names matching with their class.
 - Color interpolation modifiable by the user
+
+## External URLs
+[<img src="https://upload.wikimedia.org/wikipedia/en/b/bd/Curse%2C_Inc_Logo.png" alt="CurseForge" width=100>](https://www.curseforge.com/wow/addons/session-time)
+[<img src="https://s.wowinterface.com/images/wowinterface.gif" alt="WoWInterface" width=120>](https://www.wowinterface.com/downloads/info25814-SessionTime.html)
