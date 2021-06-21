@@ -1,4 +1,4 @@
-local useCharacterDataCB = STCreateFrame("CheckButton", "UseCharacterDataCheckButton", 20, 20, "DIALOG", false, mainFrame, "UICheckButtonTemplate", {"CENTER", -65,-65});
+local useCharacterDataCB = STCreateFrame("CheckButton", "UseCharacterDataCheckButton", 20, 20, "MEDIUM", false, mainFrame, "UICheckButtonTemplate", {"CENTER", -65,-65});
 
 local function displayCharacterData()
     showCharacterData = useCharacterDataCB:GetChecked();
@@ -15,6 +15,5 @@ end
 STRegisterCheckboxChange(useCharacterDataCB, displayCharacterData )
 
 
-local checkButtonFS = STCreateFrameFontString(useCharacterDataCB, "CheckButtonFS", {"CENTER",70,0})
+local checkButtonFS = STCreateFrameFontString(useCharacterDataCB, "CheckButtonFS", {"CENTER",70,0}, nil, nil, {1,1,0,1})
 checkButtonFS:SetText("View character data")
-checkButtonFS:SetTextColor(1,1,0,1);
