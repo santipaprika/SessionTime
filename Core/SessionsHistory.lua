@@ -31,7 +31,8 @@ function BuildSessionsTableString()
     local sessionsTableString = showCharacterData and {"OLD SESSIONS (" .. characters[characterIdx] .. "):", " "} or {"OLD SESSIONS", " "}
 
     if (sessionsCounter > 0) then
-        for i = sessionsCounter, 1, -1 do -- Prepare the data to be displaed
+        
+        for i = sessionsCounter, 1, -1 do -- Prepare the data to be displayed
             if (sessionsTable[i][3] == characterIdx or not showCharacterData) then
                 local color = BlendColorFromTime(sessionsTable[i][2], {0,255,0}, 3600, {255,255,0}, 7200, {255,0,0});
                 table.insert(sessionsTableString, color .. sessionsTable[i][1] .. " - " .. SecondsToHMSString(sessionsTable[i][2]) .. " (" .. characters[sessionsTable[i][3]] .. ")")
@@ -70,5 +71,4 @@ function BuildSessionsTableString()
         sessionsString = table.concat(dataToDisplay, "\n") .. "\n"
         histFrame.text:SetText(sessionsString);
     end);
-
 end

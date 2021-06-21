@@ -1,0 +1,10 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+	<Script file="STUtils.lua"/>
+	<Script file="SessionTime.lua"/>
+	<Script file="TimeManagement.lua"/>
+	<Script file="SessionsManagement.lua"/>
+	<Script file="SessionsHistory.lua"/>
+	<Script file="STUserStats.lua"/>
+	<Script file="CharacterDataDisplayManagement.lua"/>
+</Ui>
