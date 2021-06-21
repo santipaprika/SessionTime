@@ -16,9 +16,13 @@ Shows the current session's time played and provides stats regarding play time.
   - 2 hours → Yellow
   - 3 hours → Red
 - Being *Away*/*AFK* stops the session's time counter.
+- **[NEW]** All sessions' data can be obtained in CSV format.
 
 ## Demo:
 ![Time Display](https://media.giphy.com/media/eRNDMuoIO26G22Rtyy/giphy.gif)  
+  
+**NEW (Get CSV):**  
+<img src="https://i.gyazo.com/030818b0ea6c757dc203b080d4e12773.png" alt="CSV_export" width="500">
 
 ## Future work:
 - More stats.
