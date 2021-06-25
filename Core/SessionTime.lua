@@ -1,6 +1,7 @@
 -- CREATE FRAME --
 mainFrame = STCreateFrame("Frame", "MainFrame", 256, 180, nil, true, nil, nil, {"CENTER",0,300})
 mainFrame:Hide()
+tinsert(UISpecialFrames, mainFrame:GetName())
 
 -- CREATE LDB --
 local sTime = LibStub("AceAddon-3.0"):NewAddon("SessionTime", "AceConsole-3.0")

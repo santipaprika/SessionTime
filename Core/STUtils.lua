@@ -118,6 +118,7 @@ function STRegisterButtonFrameDisplay(STbutton, STframe, functionToApply)
             STframe:Show()
         end
     end);
+    tinsert(UISpecialFrames, STframe:GetName())
 end
 
 function STRegisterCheckboxChange(STCheckButton, functionToApply)
