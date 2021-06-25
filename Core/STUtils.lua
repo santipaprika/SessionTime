@@ -119,6 +119,8 @@ function STRegisterButtonFrameDisplay(STbutton, STframe, functionToApply)
         end
     end);
     tinsert(UISpecialFrames, STframe:GetName())
+    STframe:HookScript("OnShow", function(self) PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN) end)
+    STframe:HookScript("OnHide", function(self) PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE) end)
 end
 
 function STRegisterCheckboxChange(STCheckButton, functionToApply)

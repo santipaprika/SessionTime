@@ -2,6 +2,8 @@
 mainFrame = STCreateFrame("Frame", "MainFrame", 256, 180, nil, true, nil, nil, {"CENTER",0,300})
 mainFrame:Hide()
 tinsert(UISpecialFrames, mainFrame:GetName())
+mainFrame:HookScript("OnShow", function(self) PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN) end)
+mainFrame:HookScript("OnHide", function(self) PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE) end)
 
 -- CREATE LDB --
 local sTime = LibStub("AceAddon-3.0"):NewAddon("SessionTime", "AceConsole-3.0")
