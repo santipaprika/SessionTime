@@ -49,6 +49,10 @@ function CreateCSVFrame()
     CSVFrame.text = STCreateFrameFontString(CSVFrame, "SessionsFS", {"TOPLEFT",CSVFrame,"TOPLEFT",10,40}, CSVFrame:GetWidth() - 10, CSVFrame:GetHeight() - 40, {1,0.8,0.8,1});
     CSVFrame.text:SetText("Select (Ctrl+A) and copy (Ctrl+C) the content in the box to get all your session data in CSV format.");
     CSVFrame:Hide();
+
+    tinsert(UISpecialFrames, CSVFrame:GetName())
+    CSVFrame:HookScript("OnShow", function(self) PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN) end)
+    CSVFrame:HookScript("OnHide", function(self) PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE) end)
     
     -- EDIT BOX BACKGROUND --
     local BGEditBox = STCreateFrame("Frame", "BgCSVFrame", CSVFrame:GetWidth() - 40, CSVFrame:GetHeight() - 60, "HIGH", false, CSVFrame, BackdropTemplateMixin and "BackdropTemplate");
