@@ -1,4 +1,4 @@
-## Interface: 90207
+## Interface: 30400
 ## Title: Session Time
 ## Notes: Check the current session time played
 ## SavedVariables: characters, sessionsTable, sessionsCounter, SessionTimeDB
