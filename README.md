@@ -5,7 +5,7 @@ Shows the current session's time played and provides stats regarding play time.
 - Current session's time.
 - Minimap button to show/hide the main addon's frame.
 - Sessions history (date and hour, time played, character).
-- Play time stats.
+- Average daily playtime.
 - Last two points can display user data (default) or character-specific data.
 - For sessions time (current and history), color is interpolated using time:
   - 0 seconds → Green 
