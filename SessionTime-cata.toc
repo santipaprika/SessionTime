@@ -1,4 +1,4 @@
-## Interface: 11501
+## Interface: 40400
 ## Title: Session Time
 ## Notes: Shows the current session's playtime and the average daily playtime over the last few days
 ## Version: 1.3
