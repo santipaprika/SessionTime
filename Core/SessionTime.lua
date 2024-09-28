@@ -19,6 +19,11 @@ OnClick = function()
         mainFrame:Show()
     end
 end,
+OnTooltipShow = function(tooltip)
+    tooltip:AddLine("Session Time", 1, 1, 1)
+    tooltip:AddLine("Current session: " .. GetFormattedTimeString(sessionTime))
+    tooltip:AddLine("Total today: " .. GetFormattedTimeString(GetTodaysTotalTime()))
+end,
 })
 local icon = LibStub("LibDBIcon-1.0")
 
@@ -41,13 +46,11 @@ local fsSessionTime = STCreateFrameFontString(mainFrame, "sessionTimeFS", {"TOP"
 fsSessionTime:SetText("0 hours, 0 minutes, 0 seconds")
 
 -- MODIFY TIME DISPLAY TO MATCH CURRENT SESSION TIME --
-function FormatSessionTime()
-    color = BlendColorFromTime(sessionTime, {0,255,0}, 3600, {255,255,0}, 7200, {255,0,0})
-    fsSessionTime:SetText(color .. SecondsToHMSString(sessionTime))
+function GetFormattedTimeString(time)
+    color = BlendColorFromTime(time, {0,255,0}, 3600, {255,255,0}, 7200, {255,0,0})
+    return color .. SecondsToHMSString(time)
 end
 
-
-
-
-
-
+function FormatSessionTime()
+    fsSessionTime:SetText(GetFormattedTimeString(sessionTime))
+end

@@ -40,6 +40,26 @@ function InitializeUserStats()
     WriteStatsFrame();
 end
 
+function GetTodaysTotalTime()
+    local dayDate = date("%m/%d/%y");
+    local dayTimeSum = sessionTime;
+    
+    prevMonth,prevDay,prevYear=dayDate:match("(%d+)/(%d+)/(%d+)")   -- initialize data and timestamp with first day (notice inverse loop)
+    prevDayTimestamp = time({month=prevMonth, day=prevDay, year=(2000 + prevYear)})
+    for i = sessionsCounter, 1, -1 do -- Prepare the data to be displaed
+        if (sessionsTable[i][3] == characterIdx or not showCharacterData) then
+            local sessionDate = string.sub(sessionsTable[i][1], 1, 8);
+
+            if (sessionDate ~= dayDate) then
+                return dayTimeSum
+            end
+
+            dayTimeSum = dayTimeSum + sessionsTable[i][2];
+        end
+    end
+
+    return 0;
+end
 
 function computeDayTimeTable()
     local dayDate = date("%m/%d/%y");
