@@ -1,7 +1,7 @@
 ## Interface: 30403
 ## Title: Session Time
 ## Notes: Shows the current session's playtime and the average daily playtime over the last few days
-## Version: 1.3
+## Version: 1.3.2
 ## Author: santipaprika
 ## X-Website: https://www.curseforge.com/wow/addons/session-time
 ## X-Category: Data Export / Miscellaneous
